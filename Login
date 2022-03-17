@@ -1,0 +1,107 @@
+package khushi16;
+
+import java.sql.*;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Login extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField user;
+	private JPasswordField pass;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Login() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 403, 376);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Login Page");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+		lblNewLabel.setBounds(0, 22, 320, 66);
+		contentPane.add(lblNewLabel);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(65, 186, -13, 10);
+		contentPane.add(textArea);
+		
+		JLabel lblNewLabel_1 = new JLabel("Username");
+		lblNewLabel_1.setBounds(28, 99, 101, 28);
+		contentPane.add(lblNewLabel_1);
+		
+		user = new JTextField();
+		user.setBounds(28, 123, 320, 41);
+		contentPane.add(user);
+		user.setColumns(10);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Password");
+		lblNewLabel_1_1.setBounds(28, 175, 101, 34);
+		contentPane.add(lblNewLabel_1_1);
+		
+		pass = new JPasswordField();
+		pass.setBounds(28, 207, 320, 41);
+		contentPane.add(pass);
+		
+		JButton btnNewButton = new JButton("Login");
+		btnNewButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				try
+				{
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db"," "," ");
+					Statement stmt=con.createStatement();
+   String sql="select * from tlogin where Username='"+user.getText()+"' and Password='"+pass.getText().toString()+"'";
+   		ResultSet rs=stmt.executeQuery(sql);
+          if(rs.next())
+        	  JOptionPane.showMessageDialog(null, "Login Successfully......");
+          else
+        	  JOptionPane.showMessageDialog(null, "Incorrect username and password.....");
+          con.close();
+				}
+				catch(Exception f)
+				{
+					System.out.println(f);
+				}
+				}
+			});
+		btnNewButton.setBounds(28, 259, 101, 34);
+		contentPane.add(btnNewButton);
+	}
+}
